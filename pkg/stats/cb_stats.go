@@ -1,10 +1,9 @@
-package statcalc
+package stats
 
 import (
 	"context"
 	"log"
 	"math"
-	"statistics"
 	"sync"
 )
 
@@ -80,7 +79,7 @@ func (stats *channelBasedStats) Variance(ctx context.Context) (float64, error) {
 // statistics for every event added into the system. It is very important that
 // the context passed as an argument is closed at the end. Failure to do so will
 // leave the computation thread dangling.
-func NewChannelBasedStats(ctx context.Context) statistics.Statistics {
+func NewChannelBasedStats(ctx context.Context) Statistics {
 	stats := &channelBasedStats{
 		lock:      sync.RWMutex{},
 		eventChan: make(chan int32, 100),

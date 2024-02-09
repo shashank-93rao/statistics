@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
+	"github.com/shashank-93rao/statistics/pkg/stats"
 	"log"
 	"os"
 	"os/signal"
-	"statistics"
-	"statistics/packages/statcalc"
 	"sync"
 	"syscall"
 	"time"
@@ -73,7 +72,7 @@ func runApplication(ctx context.Context, done chan bool) {
 }
 
 // Periodically writes events and queries stats
-func writeAndQuery(ctx context.Context, id, count int, statistics statistics.Statistics, wg *sync.WaitGroup) {
+func writeAndQuery(ctx context.Context, id, count int, statistics stats.Statistics, wg *sync.WaitGroup) {
 	// Always notify the caller that the function is complete at the end
 	defer wg.Done()
 
@@ -97,6 +96,6 @@ func writeAndQuery(ctx context.Context, id, count int, statistics statistics.Sta
 	// exit on completion
 }
 
-func getStatsImpl(ctx context.Context) statistics.Statistics {
-	return statcalc.NewChannelBasedStats(ctx)
+func getStatsImpl(ctx context.Context) stats.Statistics {
+	return stats.NewChannelBasedStats(ctx)
 }
