@@ -1,7 +1,10 @@
-package stats
+package lockbased
+
+// Async event push with lock based computation
 
 import (
 	"context"
+	"github.com/shashank-93rao/statistics/pkg/stats"
 	"log"
 	"math"
 	"sync"
@@ -73,14 +76,14 @@ func (stats *channelBasedStats) Variance(ctx context.Context) (float64, error) {
 	return stats.variance, nil
 }
 
-// NewChannelBasedStats returns a statistics calculator which asynchronously
+// NewStats returns a statistics calculator which asynchronously
 // computes the statistics for every event added into the system. Calling this
 // function also starts an asynchronous goroutine which computes the incremental
 // statistics for every event added into the system. It is very important that
 // the context passed as an argument is closed at the end. Failure to do so will
 // leave the computation thread dangling.
-func NewChannelBasedStats(ctx context.Context) Statistics {
-	stats := &channelBasedStats{
+func NewStats(ctx context.Context) stats.Statistics {
+	statsObj := &channelBasedStats{
 		lock:      sync.RWMutex{},
 		eventChan: make(chan int32, 100),
 		statsValues: statsValues{
@@ -94,8 +97,8 @@ func NewChannelBasedStats(ctx context.Context) Statistics {
 			max:      math.MinInt32,
 		},
 	}
-	go runComputeThread(ctx, stats)
-	return stats
+	go runComputeThread(ctx, statsObj)
+	return statsObj
 }
 
 // sets the statistics after obtaining the write lock

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/shashank-93rao/statistics/pkg/stats"
+	"github.com/shashank-93rao/statistics/pkg/stats/factory"
 	"log"
 	"os"
 	"os/signal"
@@ -51,23 +52,27 @@ func runApplication(ctx context.Context, done chan bool) {
 	wg := sync.WaitGroup{}
 	wg.Add(totalThreads)
 
-	stats := getStatsImpl(ctx)
+	statsObj, err := factory.GetStats(ctx, factory.CH)
+	if err != nil {
+		log.Printf("Gor Error %e\n", err)
+		return
+	}
 
 	// Start threads to populate and query data
 	for i := 0; i < totalThreads; i++ {
-		go writeAndQuery(ctx, i+1, iterationsPerThread, stats, &wg)
+		go writeAndQuery(ctx, i+1, iterationsPerThread, statsObj, &wg)
 	}
 	// Wait for all the threads to stop
 	wg.Wait()
 
-	// Just in case the stats calculator is async
+	// Just in case the statsObj calculator is async
 	// wait for the processor to catchup
 	time.Sleep(5 * time.Second)
 
-	mean, _ := stats.Mean(ctx)
-	variance, _ := stats.Variance(ctx)
-	minVal, _ := stats.Min(ctx)
-	maxVal, _ := stats.Max(ctx)
+	mean, _ := statsObj.Mean(ctx)
+	variance, _ := statsObj.Variance(ctx)
+	minVal, _ := statsObj.Min(ctx)
+	maxVal, _ := statsObj.Max(ctx)
 	log.Printf("Final Stats: Min: %d, Max: %d, Mean: %f, Variance: %f\n", minVal, maxVal, mean, variance)
 }
 
@@ -94,8 +99,4 @@ func writeAndQuery(ctx context.Context, id, count int, statistics stats.Statisti
 		}
 	}
 	// exit on completion
-}
-
-func getStatsImpl(ctx context.Context) stats.Statistics {
-	return stats.NewChannelBasedStats(ctx)
 }
