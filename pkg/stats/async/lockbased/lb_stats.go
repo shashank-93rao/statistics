@@ -4,10 +4,11 @@ package lockbased
 
 import (
 	"context"
-	"github.com/shashank-93rao/statistics/pkg/stats"
 	"log"
 	"math"
 	"sync"
+
+	"github.com/shashank-93rao/statistics/pkg/stats"
 )
 
 // Holds the values computed by the stats calculator

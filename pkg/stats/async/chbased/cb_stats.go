@@ -4,9 +4,10 @@ package chbased
 
 import (
 	"context"
-	"github.com/shashank-93rao/statistics/pkg/stats"
 	"log"
 	"math"
+
+	"github.com/shashank-93rao/statistics/pkg/stats"
 )
 
 // Holds the values computed by the stats calculator

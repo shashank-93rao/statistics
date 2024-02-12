@@ -3,6 +3,7 @@ package factory
 import (
 	"context"
 	"errors"
+
 	"github.com/shashank-93rao/statistics/pkg/stats"
 	"github.com/shashank-93rao/statistics/pkg/stats/async/chbased"
 	"github.com/shashank-93rao/statistics/pkg/stats/async/lockbased"

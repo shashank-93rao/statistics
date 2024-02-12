@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"github.com/shashank-93rao/statistics/pkg/stats"
-	"github.com/shashank-93rao/statistics/pkg/stats/factory"
 	"log"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/shashank-93rao/statistics/pkg/stats"
+	"github.com/shashank-93rao/statistics/pkg/stats/factory"
 )
 
 // Demonstrates working of stats application.
